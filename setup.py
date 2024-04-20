@@ -1,6 +1,9 @@
-import setuptools
+from setuptools import setup, find_packages
 
-setuptools.setup(
+# setuptools.config.
+
+
+setup(
     name="simple-bigram",
     version="0.1.0",
     description="simple transformer model",
@@ -13,5 +16,17 @@ setuptools.setup(
     download_url="",
     requires=[
         "torch",
-    ]
+    ],
+
+    packages=find_packages(
+        where=".", 
+        exclude=["data", "tmp", "simple_bigram.test"],
+        include= [ "simple_bigram"]
+    ),
+    
+    entry_points = {
+        'console_scripts' : [
+            'bigram = simple_bigram:main'
+        ]
+    }
 )

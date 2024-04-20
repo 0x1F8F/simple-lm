@@ -6,8 +6,8 @@ import dataclasses as d
 
 @d.dataclass
 class ModelConfig:
-    d_model,
-    vocab_size
+    d_model: int
+    vocab_size: int
 
 class FeedForward(nn.Module):
 
