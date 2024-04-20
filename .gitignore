@@ -1,0 +1,7 @@
+*.ipynb
+*.tmp
+*.log
+__pycache__/
+data/
+tmp/
+.pytest_cache/
