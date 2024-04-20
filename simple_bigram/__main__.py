@@ -1,4 +1,9 @@
-from . import main
+import fire
+
+class Main:
+    def __call__(self):
+        ...
+
 
 if __name__=='__main__':
-    main()
+    fire.Fire(Main)
