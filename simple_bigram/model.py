@@ -1,17 +1,15 @@
 import torch
 import torch.nn as nn
-import dataclasses as d
-# import torch.nn.functional as F
-# import simple_bigram as sb
+from dataclasses import dataclass
 
-@d.dataclass
+@dataclass
 class ModelConfig:
     d_model: int
     vocab_size: int
 
 class FeedForward(nn.Module):
 
-    def __init__( self , in_layer : int , d_model: int ) -> None:
+    def __init__( self , d_model: int ) -> None:
         super().__init__()
         self.d_model = d_model
         self.inp = nn.Linear(d_model , d_model//2 , bias=True)
@@ -22,7 +20,7 @@ class FeedForward(nn.Module):
         self.relu = nn.ReLU(inplace=True)
 
     def forward(self, x: torch.Tensor ) -> torch.Tensor:
-        x = x.view(-1 , self.in_layer )
+        x = x.view(-1 , self.d_model )
         x = self.relu(self.inp(x))
         x = self.relu(self.l1(x))
         x = self.relu(self.l2(x))
@@ -32,12 +30,14 @@ class FeedForward(nn.Module):
 
 class BiGram(nn.Module):
 
-    def __init__( self , vocab_size: int ) -> None:
+    def __init__( self , config:ModelConfig ) -> None:
         super().__init__()
-        self.vocab_size = vocab_size
-        self.embedding_table = nn.Embedding( vocab_size, 3)
+        self.vocab_size = config.vocab_size
+        self.d_model = config.d_model
+        self.config = config
+        self.embedding_table = nn.Embedding( self.vocab_size, 3)
         self.layer_norm = nn.LayerNorm( normalized_shape=3, bias=True)
-        self.feedforward = FeedForward(in_layer= vocab_size*3 ,d_model=vocab_size)
+        self.feedforward = FeedForward(d_model=self.d_model)
         self.softmax = nn.Softmax( dim=-1 )
 
     def forward( self , x: torch.Tensor ) -> torch.Tensor :

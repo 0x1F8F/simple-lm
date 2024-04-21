@@ -4,8 +4,6 @@ from .model import (
     FeedForward
 )
 
-from .trainer import (
-    encode,
-    decode,
-    main
+from .tokenizer import (
+    Tokenizer
 )
